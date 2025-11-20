@@ -39,14 +39,13 @@ public class IterableWithPolicyClass<T> implements IterableWithPolicy<T> {
 
     class Iter implements Iterator<T> {
 
-        private int currentIndex;
+        private int currentIndex = 0;
 
         /*
          * {@inheritDoc}
          */
         public boolean hasNext() {
-            while(currentIndex < elements.length) {
-                currentIndex++;
+            if(currentIndex < elements.length) {
                 return true;
             }
             return false;
