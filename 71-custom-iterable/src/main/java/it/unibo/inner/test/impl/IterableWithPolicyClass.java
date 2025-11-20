@@ -1,5 +1,6 @@
 package it.unibo.inner.test.impl;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -8,16 +9,14 @@ import it.unibo.inner.api.Predicate;
 
 public class IterableWithPolicyClass<T> implements IterableWithPolicy<T> {
     
-    private T[] elements;
-    private Predicate<T> iterationPolicy;
+    private final T[] elements;
 
     /**
      * @param elements
      * @param elem
      */
-    public IterableWithPolicyClass(T[] elem, Predicate<T> policy) {
+    public IterableWithPolicyClass(T[] elem) {
         this.elements = elem;
-        this.iterationPolicy = policy;
     }
 
     /*
@@ -31,27 +30,24 @@ public class IterableWithPolicyClass<T> implements IterableWithPolicy<T> {
      * {@inheritDoc}
      */
     public Iterator<T> iterator() {
-        return new Iter(this.elements);
+        return new Iter();
+    }
+
+    public String toString() {
+        return Arrays.toString(elements);
     }
 
     class Iter implements Iterator<T> {
 
-        private T[] array;
         private int currentIndex;
-
-        public Iter(T[] array) {
-            this.array = array;
-            this.currentIndex = 0;
-        }
 
         /*
          * {@inheritDoc}
          */
         public boolean hasNext() {
-            for(; currentIndex < this.array.length; currentIndex++) {
-                if(iterationPolicy.test(array[currentIndex])) {
-                    return true;
-                } 
+            while(currentIndex < elements.length) {
+                currentIndex++;
+                return true;
             }
             return false;
         }
@@ -61,9 +57,7 @@ public class IterableWithPolicyClass<T> implements IterableWithPolicy<T> {
          */
         public T next() {
             while(this.hasNext()) {
-                if(iterationPolicy.test(array[currentIndex])) {
-                    return this.array[currentIndex++];
-                }
+                return elements[currentIndex++];
             }
             throw new NoSuchElementException();
         }
