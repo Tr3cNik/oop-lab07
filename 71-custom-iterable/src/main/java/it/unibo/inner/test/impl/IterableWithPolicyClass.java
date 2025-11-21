@@ -10,7 +10,7 @@ import it.unibo.inner.api.Predicate;
 public class IterableWithPolicyClass<T> implements IterableWithPolicy<T> {
     
     private final T[] elements;
-    private final Predicate<T> policyUsed;
+    private Predicate<T> policyUsed;
 
     /**
      * @param elements
@@ -33,13 +33,15 @@ public class IterableWithPolicyClass<T> implements IterableWithPolicy<T> {
     /*
      * {@inheritDoc}
      */
+    @Override
     public void setIterationPolicy(Predicate<T> filter) {
-    
+        this.policyUsed = filter;
     }
 
     /*
      * {@inheritDoc}
      */
+    @Override
     public Iterator<T> iterator() {
         return new Iter();
     }
@@ -55,6 +57,7 @@ public class IterableWithPolicyClass<T> implements IterableWithPolicy<T> {
         /*
          * {@inheritDoc}
          */
+        @Override
         public boolean hasNext() {
             if(currentIndex < elements.length) {
                 return true;
@@ -65,6 +68,7 @@ public class IterableWithPolicyClass<T> implements IterableWithPolicy<T> {
         /*
          * {@inheritDoc}
          */
+        @Override
         public T next() {
             while(this.hasNext()) {
                 return elements[currentIndex++];
