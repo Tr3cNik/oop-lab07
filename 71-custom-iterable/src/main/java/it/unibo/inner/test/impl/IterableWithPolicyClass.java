@@ -1,7 +1,8 @@
 package it.unibo.inner.test.impl;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import it.unibo.inner.api.IterableWithPolicy;
@@ -47,7 +48,13 @@ public class IterableWithPolicyClass<T> implements IterableWithPolicy<T> {
     }
 
     public String toString() {
-        return Arrays.toString(elements);
+        final List<T> output = new ArrayList<>();
+        for(T elem: elements) {
+            if(policyUsed.test(elem)) {
+                output.add(elem);
+            }
+        }
+        return output.toString();
     }
 
     class Iter implements Iterator<T> {
