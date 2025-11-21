@@ -59,8 +59,8 @@ public class IterableWithPolicyClass<T> implements IterableWithPolicy<T> {
          */
         @Override
         public boolean hasNext() {
-            for(T elem: elements) {
-                if(policyUsed.test(elem)) {
+            for(; currentIndex < elements.length; currentIndex++) {
+                if(policyUsed.test(elements[currentIndex])) {
                     return true;
                 }
             }
@@ -73,7 +73,9 @@ public class IterableWithPolicyClass<T> implements IterableWithPolicy<T> {
         @Override
         public T next() {
             while(this.hasNext()) {
-                return elements[currentIndex++];
+                if(policyUsed.test(elements[currentIndex])) {
+                     return elements[currentIndex++];
+                }
             }
             throw new NoSuchElementException();
         }
