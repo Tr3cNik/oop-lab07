@@ -1,8 +1,6 @@
 package it.unibo.nestedenum;
 
 import java.util.Comparator;
-import java.util.Locale;
-import java.util.Objects;
 
 /**
  * Implementation of {@link MonthSorter}.
@@ -29,18 +27,54 @@ public final class MonthSorterNested implements MonthSorter {
             this.days = days;
         }
 
-        public Month fromString(String stringMonth) {
-            return (Month)stringMonth;
+        public static Month fromString(String stringMonth) {
+            Month exceptedMonth = null;
+            int monthCounter = 0;
+            for(Month m: Month.values()) {
+                if(m.name().toLowerCase().startsWith(stringMonth.toLowerCase())) {
+                    exceptedMonth = m;
+                    monthCounter++;
+                }
+            }
+            if(monthCounter != 1) {
+                throw new IllegalArgumentException(stringMonth + "is not valid");
+            }
+            return exceptedMonth;
         }
     }
 
     @Override
     public Comparator<String> sortByDays() {
-        return null;
+        return new Comparator<String>() {
+            @Override
+            public int compare(String arg0, String arg1) {
+                return Integer.compare(Month.fromString(arg0).days, Month.fromString(arg1).days);
+            }
+        };
     }
 
     @Override
     public Comparator<String> sortByOrder() {
-        return null;
+        return new Comparator<String>() {
+           @Override
+            public int compare(String arg0, String arg1) {
+                return Month.fromString(arg0).compareTo(Month.fromString(arg1));
+            } 
+        };
     }
+    /* 
+    public class SortByMonthOrder implements Comparator<String> {
+        @Override
+        public int compare(String arg0, String arg1) {
+            return Month.fromString(arg0).compareTo(Month.fromString(arg1));
+        }
+    }
+
+    public class SortByDate implements Comparator<String> {
+        @Override
+        public int compare(String arg0, String arg1) {
+            return Integer.compare(Month.fromString(arg0).days, Month.fromString(arg1).days);
+        }
+    }
+    */
 }

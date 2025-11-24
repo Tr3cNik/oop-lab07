@@ -117,7 +117,7 @@ public final class Transformers {
         return select(base, new Function<I, Boolean>() {
             @Override
             public Boolean call(I input) {
-                return test.call(input);
+                return !test.call(input);
             }
         });
     }
